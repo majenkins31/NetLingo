@@ -63,7 +63,7 @@ def update_response(response):
 
 # Create the main application window
 root = tk.Tk()
-root.title("PCAP Parser")
+root.title("NetLingo")
 
 # Configure the dark mode theme
 bg_color = "#1e1e1e"  # Dark background color
