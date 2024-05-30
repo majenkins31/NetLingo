@@ -6,7 +6,6 @@ from scapy.all import *
 from langchain_community.llms import Ollama
 import threading
 import csv
-import chardet
 
 llm = Ollama(model="llama3")
 
@@ -25,21 +24,14 @@ def parse_pcap(input_file):
 
 def parse_csv(input_file):
     try:
-        # Detect the file's encoding
-        with open(input_file, 'rb') as file:
-            raw_data = file.read()
-            result = chardet.detect(raw_data)
-            encoding = result['encoding']
-        
         csv_contents = ""
-        with open(input_file, 'r', encoding=encoding) as file:
+        with open(input_file, 'r') as file:
             reader = csv.reader(file)
             for row in reader:
                 csv_contents += ','.join(row) + '\n'
         return csv_contents
     except Exception as e:
         return f"Error parsing CSV: {e}"
-
 
 def open_file_dialog(file_type):
     if file_type == "pcap":
