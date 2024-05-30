@@ -6,6 +6,7 @@ from scapy.all import *
 from langchain_community.llms import Ollama
 import threading
 import csv
+import chardet
 
 llm = Ollama(model="llama3")
 
@@ -33,6 +34,25 @@ def parse_csv(input_file):
     except Exception as e:
         return f"Error parsing CSV: {e}"
 
+def parse_csv_xdr_alert(input_file):
+    try:
+        # Detect the file's encoding
+        with open(input_file, 'rb') as file:
+            raw_data = file.read()
+            result = chardet.detect(raw_data)
+            encoding = result['encoding']
+        
+        csv_contents = ""
+        with open(input_file, 'r', encoding=encoding) as file:
+            reader = csv.reader(file)
+            for row in reader:
+                # Clean up the row data by removing leading/trailing whitespace
+                cleaned_row = [cell.strip() for cell in row]
+                csv_contents += ','.join(cleaned_row) + '\n'
+        return csv_contents
+    except Exception as e:
+        return f"Error parsing XDR Alert CSV: {e}"
+
 def open_file_dialog(file_type):
     if file_type == "pcap":
         input_file = filedialog.askopenfilename(filetypes=[("PCAP files", "*.pcap *.pcapng")])
@@ -44,6 +64,11 @@ def open_file_dialog(file_type):
         if input_file:
             file_label.config(text=f"Selected file: {os.path.basename(input_file)}")
             threading.Thread(target=load_file_content, args=(input_file, parse_csv)).start()
+    elif file_type == "xdr":
+        input_file = filedialog.askopenfilename(filetypes=[("XDR Alert CSV files", "*.csv")])
+        if input_file:
+            file_label.config(text=f"Selected file: {os.path.basename(input_file)}")
+            threading.Thread(target=load_file_content, args=(input_file, parse_csv_xdr_alert)).start()
 
 def load_file_content(input_file, parser_func):
     try:
@@ -111,6 +136,9 @@ open_pcap_button.pack(pady=5)
 
 open_csv_button = tk.Button(frame, text="Open CSV File", command=lambda: open_file_dialog("csv"), bg=bg_color, fg=text_color)
 open_csv_button.pack(pady=5)
+
+open_xdr_button = tk.Button(frame, text="Open XDR Alert CSV", command=lambda: open_file_dialog("xdr"), bg=bg_color, fg=text_color)
+open_xdr_button.pack(pady=5)
 
 # Create a label to display the selected file name
 file_label = tk.Label(frame, text="", bg=bg_color, fg=text_color)
