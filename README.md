@@ -5,7 +5,5 @@ You will need to install Ollama follow: https://github.com/ollama/ollama to inst
 
 You will also need to install the requirements using the requirements.txt file and the NetLingoDepInstaller.bat script.
 
-You will need to convert batch script to shell script if installing requirements on Linux or Mac.
-
 To run: py NetLingo.py
 
