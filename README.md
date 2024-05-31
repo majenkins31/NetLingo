@@ -17,6 +17,6 @@ Download and test the model to ensure it is working with ollama:
 
 Download the gguf from huggingface, create the Modelfile using echo. > Modelfile, then open with text editor and add: FROM C:\Users\username\Downloads\NameOfModel.gguf, then run the command: ollama create NameOfModel -f Modelfile, then to run: ollama run NameOfModel
 
-Edit to code to use the new model instead of llama3, that should do it!
+Edit the code to use the new model instead of llama3, that should do it!
 
 
