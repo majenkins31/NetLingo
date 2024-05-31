@@ -9,3 +9,14 @@ You will also need to install the requirements using the requirements.txt file a
 
 To run: py NetLingo.py
 
+Extra:
+
+Try using a different model from huggingface.co!
+
+Download and test the model to ensure it is working with ollama:
+
+Download the gguf from huggingface, create the Modelfile using echo. > Modelfile, then open with text editor and add: FROM C:\Users\username\Downloads\NameOfModel.gguf, then run the command: ollama create NameOfModel -f Modelfile, then to run: ollama run NameOfModel
+
+Edit to code to use the new model instead of llama3, that should do it!
+
+
