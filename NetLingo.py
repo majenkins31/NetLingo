@@ -33,6 +33,14 @@ def parse_csv(input_file):
     except Exception as e:
         return f"Error parsing CSV: {e}"
 
+def parse_txt(input_file):
+    try:
+        with open(input_file, 'r') as file:
+            txt_contents = file.read()
+        return txt_contents
+    except Exception as e:
+        return f"Error parsing TXT: {e}"
+
 def open_file_dialog(file_type):
     if file_type == "pcap":
         input_file = filedialog.askopenfilename(filetypes=[("PCAP files", "*.pcap *.pcapng")])
@@ -44,6 +52,11 @@ def open_file_dialog(file_type):
         if input_file:
             file_label.config(text=f"Selected file: {os.path.basename(input_file)}")
             threading.Thread(target=load_file_content, args=(input_file, parse_csv)).start()
+    elif file_type == "txt":
+        input_file = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+        if input_file:
+            file_label.config(text=f"Selected file: {os.path.basename(input_file)}")
+            threading.Thread(target=load_file_content, args=(input_file, parse_txt)).start()
 
 def load_file_content(input_file, parser_func):
     try:
@@ -105,12 +118,15 @@ root.geometry("800x600")  # Set the window size
 frame = tk.Frame(root, bg=bg_color)
 frame.pack(fill='both', expand=True, padx=10, pady=10)
 
-# Create buttons to open the file dialog for PCAP and CSV files
+# Create buttons to open the file dialog for PCAP, CSV, and TXT files
 open_pcap_button = tk.Button(frame, text="Open PCAP File", command=lambda: open_file_dialog("pcap"), bg=bg_color, fg=text_color)
 open_pcap_button.pack(pady=5)
 
 open_csv_button = tk.Button(frame, text="Open CSV File", command=lambda: open_file_dialog("csv"), bg=bg_color, fg=text_color)
 open_csv_button.pack(pady=5)
+
+open_txt_button = tk.Button(frame, text="Open TXT File", command=lambda: open_file_dialog("txt"), bg=bg_color, fg=text_color)
+open_txt_button.pack(pady=5)
 
 # Create a label to display the selected file name
 file_label = tk.Label(frame, text="", bg=bg_color, fg=text_color)
